@@ -1,0 +1,146 @@
+package com.example.sp.fillblankdemo;
+
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.Html;
+import android.text.Layout;
+import android.text.Spanned;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.View;
+import android.view.ViewTreeObserver;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+
+public class MainActivity extends AppCompatActivity {
+
+    private TextView textView;
+    private RelativeLayout rlMaskView;
+    private ImageView bottomImageView;
+    private FrameLayout fl_content;
+    Spanned spannedStr;
+    EmptySpan[] spans;
+    private Button btn_jump;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        textView = (TextView) findViewById(R.id.tv_top);
+        btn_jump = (Button) findViewById(R.id.btn_jump);
+        fl_content = (FrameLayout) findViewById(R.id.fl_content);
+        String str = FileUtils.fetchFileContent(this,"html.txt");
+
+        HtmlImageGetter htmlImageGetter = new HtmlImageGetter(textView.getContext(), textView);
+        MyImageGetter myImageGetter = new MyImageGetter(this,textView);
+        spannedStr = Html.fromHtml(str, htmlImageGetter, new MyTagHandler());
+        spans = spannedStr.getSpans(0, spannedStr.length(), EmptySpan.class);
+        for (EmptySpan s : spans) {
+            s.lineHeight = textView.getLineHeight();
+        }
+        textView.setText(spannedStr, TextView.BufferType.SPANNABLE);
+        rlMaskView = (RelativeLayout) findViewById(R.id.rl_top_mask);
+        bottomImageView = (ImageView) findViewById(R.id.iv_bottom);
+
+
+        Glide.with(this)
+                .load("http://scc.jsyxw.cn/image/20160812/1470975461952608.png")
+                .into(bottomImageView);
+        bottomImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                replaceView(spannedStr);
+//                if(rlMaskView.getChildCount() >0){
+//                    rlMaskView.removeAllViews();
+//                    return;
+//                }
+//                for(int i = 0;i<3;i++){
+//                    View myView = new View(rlMaskView.getContext());
+//
+//                    myView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+//
+//                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(30, 30);
+//
+//                    params.leftMargin = 20+40*i;
+//
+//                    params.topMargin = 30;
+//
+//                    rlMaskView.addView(myView, params);
+//                }
+
+                rlMaskView.requestLayout();
+//                rlMaskView.invalidate();
+
+            }
+        });
+        btn_jump.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,ActivityA.class);
+                startActivity(intent);
+            }
+        });
+
+        textView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                if(left != oldLeft || right != oldRight || top!= oldTop || bottom != oldBottom){
+                    replaceView(spannedStr);
+                    rlMaskView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            rlMaskView.requestLayout();
+                        }
+                    });
+                }
+            }
+        });
+
+    }
+
+    private void replaceView(Spanned spannedStr) {
+        if(rlMaskView.getChildCount() >0){
+            rlMaskView.removeAllViews();
+        }
+        for (EmptySpan s : spans) {
+
+            int start = spannedStr.getSpanStart(s);
+
+            Layout layout = textView.getLayout();
+
+            int line = layout.getLineForOffset(start);
+
+            int topPadding = textView.getCompoundPaddingTop();
+
+            int leftMargin = (int) layout.getPrimaryHorizontal(start);
+
+            int descent = layout.getLineDescent(line);
+
+            int base = layout.getLineBaseline(line);
+
+            int spanTop = base + descent - s.height;
+
+            int topMargin = spanTop + topPadding;
+
+            View myView = new View(rlMaskView.getContext());
+
+            myView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(s.width, s.height);
+
+            params.leftMargin = leftMargin;
+
+            params.topMargin = topMargin;
+
+            rlMaskView.addView(myView, params);
+        }
+    }
+}
