@@ -61,33 +61,19 @@ public abstract class ReplaceableTextView extends FrameLayout{
         for (EmptySpan s : tagSpans) {
 
             int start = spanned.getSpanStart(s);
-
             Layout layout = mTextView.getLayout();
-
             int line = layout.getLineForOffset(start);
-
             int topPadding = mTextView.getCompoundPaddingTop();
-
             int leftMargin = (int) layout.getPrimaryHorizontal(start);
-
             int descent = layout.getLineDescent(line);
-
             int base = layout.getLineBaseline(line);
-
             int spanTop = base + descent - s.height();
-
             int topMargin = spanTop + topPadding;
 
             View myView = getReplaceView();
-
-            myView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
-
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(s.width(), s.height());
-
             params.leftMargin = leftMargin;
-
             params.topMargin = topMargin;
-
             mRelativeLayout.addView(myView, params);
 
         }
