@@ -26,7 +26,6 @@ public class HtmlImageGetter implements Html.ImageGetter {
     Context mContext;
     TextView mTextView;
     HashMap<String, UrlDrawable> mMap;
-    ImageGetterListener imageGetterListener ;
 
     HtmlImageGetter(Context context, TextView textview) {
         mContext = context;
@@ -61,59 +60,17 @@ public class HtmlImageGetter implements Html.ImageGetter {
                         mTextView.setText(mTextView.getText());
                     }
                 });
-
-//        Glide.with(mContext).load(source).listener(new RequestListener<String, GlideDrawable>() {
-//            @Override
-//            public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-//                UrlDrawable drawable = mMap.get(source);
-//                float factor = resource.getIntrinsicHeight() / 200; // 最宽 200
-//                float width = resource.getIntrinsicWidth();
-//                float height = resource.getIntrinsicHeight();
-//                if (factor > 1) {
-//                    width /= factor;
-//                    height /= factor;
-//                }
-//
-//                drawable.setBounds(0, 0, Math.round(width), Math.round(height));
-//                drawable.drawable = resource;
-//                drawable.drawable.setBounds(0, 0, Math.round(width), Math.round(height));
-//                mTextView.setText(mTextView.getText());
-//                return false;
-//            }
-//        });
         return drawable;
     }
 
-    public ImageGetterListener getImageGetterListener() {
-        return imageGetterListener;
-    }
-
-    public void setImageGetterListener(ImageGetterListener imageGetterListener) {
-        this.imageGetterListener = imageGetterListener;
-    }
-
     public class UrlDrawable extends BitmapDrawable {
-        // the drawable that you need to set, you could set the initial drawing
-        // with the loading image if you need to
         protected Drawable drawable;
 
         @Override
         public void draw(Canvas canvas) {
-            // override the draw to facilitate refresh function lat
-            // er
             if(drawable != null) {
                 drawable.draw(canvas);
             }
         }
-    }
-
-    public interface ImageGetterListener{
-        void onSuccess(Drawable drawable);
-        void onFailed(String error);
     }
 }

@@ -34,27 +34,6 @@ public class MyImageGetter implements Html.ImageGetter {
 
     @Override
     public Drawable getDrawable(final String source) {
-//        Drawable drawable = null;
-//        hashMap.put(source,drawable);
-//        Glide.with(mContext)
-//                .load(source)
-//                .skipMemoryCache(true)
-//                .diskCacheStrategy(DiskCacheStrategy.NONE)
-//                .into(new SimpleTarget<GlideDrawable>() {
-//                    @Override
-//                    public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
-//                        float factor = resource.getIntrinsicHeight() / 200; // 最宽 200
-//                        float width = resource.getIntrinsicWidth();
-//                        float height = resource.getIntrinsicHeight();
-//                        if (factor > 1) {
-//                            width /= factor;
-//                            height /= factor;
-//                        }
-//                        resource.setBounds(0, 0, Math.round(width), Math.round(height));
-//
-//                    }
-//                });
-//        return mContext.getResources().getDrawable(R.mipmap.ic_launcher);
         Drawable d = new Drawable() {
             @Override
             public void draw(Canvas canvas) {

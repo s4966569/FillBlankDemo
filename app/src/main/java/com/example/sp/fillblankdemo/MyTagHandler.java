@@ -38,10 +38,7 @@ public class MyTagHandler implements Html.TagHandler {
         if (!opening && tag.toLowerCase().equals("empty")) {
             end = output.length();
             if (start != end) {
-                EmptySpan es = new EmptySpan();
-                Random r = new Random();
-                es.width = r.nextInt(100) + 100; // 100 - 200之间
-
+                EmptySpan es = new FillBlankEmptySpan();
                 output.setSpan(es, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         }

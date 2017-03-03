@@ -36,8 +36,6 @@ public abstract class ReplaceTagHandler implements Html.TagHandler {
                     e.printStackTrace();
                     return;
                 }
-                Random r = new Random();
-                es.width = r.nextInt(100) + 100; // 100 - 200之间
                 output.setSpan(es, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         }

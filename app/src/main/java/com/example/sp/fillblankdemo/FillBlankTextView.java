@@ -1,7 +1,6 @@
 package com.example.sp.fillblankdemo;
 
 import android.content.Context;
-import android.text.Html;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
@@ -32,6 +31,6 @@ public class FillBlankTextView extends ReplaceableTextView {
 
     @Override
     protected ReplaceTagHandler getTagHandler() {
-        return new FBTagHandler();
+        return new FillBlankTagHandler();
     }
 }

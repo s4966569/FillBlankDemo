@@ -19,12 +19,12 @@ public class ActivityA extends Activity {
         fbTextView = (FillBlankTextView) findViewById(R.id.fbTextView);
         btn_switch = (Button) findViewById(R.id.btn_switch);
 
-        fbTextView.setHtmlText(FileUtils.fetchFileContent(this,"html.txt"));
+        fbTextView.setText(FileUtils.fetchFileContent(this,"html.txt"));
 
         btn_switch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fbTextView.replaceView();
+                fbTextView.removeAllReplacementView();
             }
         });
     }

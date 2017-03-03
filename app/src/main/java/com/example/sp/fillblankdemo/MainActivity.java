@@ -2,6 +2,8 @@ package com.example.sp.fillblankdemo;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -17,12 +19,15 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import java.util.Collection;
+
 public class MainActivity extends AppCompatActivity {
 
-    private TextView textView;
+    private MyTextView textView;
     private RelativeLayout rlMaskView;
     private ImageView bottomImageView;
     private FrameLayout fl_content;
@@ -34,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        textView = (TextView) findViewById(R.id.tv_top);
+        textView = (MyTextView) findViewById(R.id.tv_top);
         btn_jump = (Button) findViewById(R.id.btn_jump);
         fl_content = (FrameLayout) findViewById(R.id.fl_content);
         String str = FileUtils.fetchFileContent(this,"html.txt");
@@ -57,27 +62,6 @@ public class MainActivity extends AppCompatActivity {
         bottomImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                replaceView(spannedStr);
-//                if(rlMaskView.getChildCount() >0){
-//                    rlMaskView.removeAllViews();
-//                    return;
-//                }
-//                for(int i = 0;i<3;i++){
-//                    View myView = new View(rlMaskView.getContext());
-//
-//                    myView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
-//
-//                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(30, 30);
-//
-//                    params.leftMargin = 20+40*i;
-//
-//                    params.topMargin = 30;
-//
-//                    rlMaskView.addView(myView, params);
-//                }
-
-                rlMaskView.requestLayout();
-//                rlMaskView.invalidate();
 
             }
         });
@@ -89,18 +73,24 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        textView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+//        textView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+//            @Override
+//            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+//                if(left != oldLeft || right != oldRight || top!= oldTop || bottom != oldBottom){
+//                    bottomImageView.post(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            replaceSpanWithView(spannedStr);
+//                        }
+//                    });
+//                }
+//            }
+//        });
+
+        textView.setOnDrawFinishedListener(new MyTextView.OnDrawFinishedListener() {
             @Override
-            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                if(left != oldLeft || right != oldRight || top!= oldTop || bottom != oldBottom){
-                    replaceView(spannedStr);
-                    rlMaskView.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            rlMaskView.requestLayout();
-                        }
-                    });
-                }
+            public void onDrawFinished() {
+                replaceView(spannedStr);
             }
         });
 
@@ -126,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
             int base = layout.getLineBaseline(line);
 
-            int spanTop = base + descent - s.height;
+            int spanTop = base + descent - s.height();
 
             int topMargin = spanTop + topPadding;
 
@@ -134,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
 
             myView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
 
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(s.width, s.height);
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(s.width(), s.height());
 
             params.leftMargin = leftMargin;
 

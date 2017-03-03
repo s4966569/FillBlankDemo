@@ -6,16 +6,16 @@ import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
+import android.text.TextPaint;
 import android.text.style.DynamicDrawableSpan;
+import android.util.Log;
 
 /**
  * Created by cailei on 05/01/2017.
  */
 
-public class EmptySpan extends DynamicDrawableSpan {
+public abstract class EmptySpan extends DynamicDrawableSpan {
     public int lineHeight;
-    public int width = 200;
-    public int height = 180;
 
     @Override
     public Drawable getDrawable() {
@@ -23,8 +23,8 @@ public class EmptySpan extends DynamicDrawableSpan {
             @Override
             public void draw(Canvas canvas) {
                 Paint p = new Paint();
-                p.setColor(Color.GREEN);
-                canvas.drawRect(0,0,width,height,p);
+                p.setColor(color());
+                canvas.drawRect(0,0,width(),height(),p);
             }
 
             @Override
@@ -42,22 +42,27 @@ public class EmptySpan extends DynamicDrawableSpan {
                 return PixelFormat.OPAQUE;
             }
         };
-        d.setBounds(0, 0, width, height);
+        d.setBounds(0, 0, width(), height());
         return d;
     }
 
     @Override
     public int getSize(Paint paint, CharSequence text, int start, int end, Paint.FontMetricsInt fm) {
         if (fm != null) {
-            if (height > lineHeight) {
+            if (height() > lineHeight) {
                 int orgDescent = fm.descent;
-                int extraSpace = height - (fm.descent - fm.ascent);
+                int extraSpace = height() - (fm.descent - fm.ascent);
                 fm.descent = extraSpace / 2 + orgDescent;
                 fm.bottom = fm.descent;
-                fm.ascent = -height + fm.descent;
+                fm.ascent = -height() + fm.descent;
                 fm.top = fm.ascent;
             }
         }
-        return width;
+        return width();
     }
+
+    protected abstract int width();
+    protected abstract int height();
+    protected abstract int color();
+
 }

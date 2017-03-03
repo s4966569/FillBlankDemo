@@ -4,10 +4,10 @@ package com.example.sp.fillblankdemo;
  * Created by sp on 17-2-24.
  */
 
-public class FBTagHandler extends ReplaceTagHandler {
+public class FillBlankTagHandler extends ReplaceTagHandler {
     @Override
     protected Class<? extends EmptySpan> getSpanType() {
-        return EmptySpan.class;
+        return FillBlankEmptySpan.class;
     }
 
     @Override
