@@ -1,0 +1,16 @@
+首先要搞清楚几点概念：
+HEAD指针：指向当前所在的commit版本，并不一定是当前分支的最后一个提交。
+分支指针：指向当前分支的最后一个提交。
+默认情况下，HEAD指针是指向当前分支指针的，也就是说HEAD指针指向的是当前分支的最后一个提交。
+HEAD:最后一次提交
+HEAD~:最后一次提交的父提交
+HEAD~2:最后一次提交的父提交的父提交
+HEAD~3,HEAD~4以此类推。
+：：一般需要加commit号的 如果什么都不写，都是默认HEAD
+reset:会移动当前分支指针的指向，因为HEAD指针指向的是当前分支的指针，所以当当前分支的指针移动的时候，HEAD也会跟着移动。
+checkout:移动HEAD指针的指向，当前所在分支的指针并不会移动。这就是reset跟checkout最本质的区别。
+------git reset:移动当前所在分支的指针指向(HEAD指针跟着移动)。
+git reset --soft (HEAD，不加HEAD默认是HEAD|某一个commit号):移动HEAD指针
+git reset --mixed(HEAD|commit号)：移动HEAD指针，并用HEAD指向的快照更新index索引区的内容；--mixed是默认选项，等同于git reset
+git reset --hard(HEAD|commit号)：移动HEAD指针，并用HEAD指向的快照更新index索引区跟工作区
+

@@ -40,8 +40,8 @@ public class HtmlImageGetter implements Html.ImageGetter {
         drawable.setBounds(0, 0, 0, 0);
         Glide.with(mContext)
                 .load(source)
-                .skipMemoryCache(true)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
+//                .skipMemoryCache(true)
+//                .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(new SimpleTarget<GlideDrawable>() {
                     @Override
                     public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {

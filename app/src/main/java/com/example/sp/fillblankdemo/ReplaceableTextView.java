@@ -11,16 +11,19 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.HashMap;
+
 /**
  * Created by sp on 17-2-23.
  */
 
-public abstract class ReplaceableTextView extends FrameLayout{
+public abstract class ReplaceableTextView<T extends View> extends FrameLayout{
     protected MyTextView mTextView;
     protected RelativeLayout mRelativeLayout;
     protected Context mContext;
     protected Spanned spanned;
     protected EmptySpan[] tagSpans;
+    private HashMap<EmptySpan,T> hashMap;
     public ReplaceableTextView(Context context) {
         super(context);
         init(context);
@@ -38,6 +41,7 @@ public abstract class ReplaceableTextView extends FrameLayout{
 
     private void init(Context context){
         mContext = context;
+        hashMap = new HashMap<>();
         View view = LayoutInflater.from(context).inflate(R.layout.replaceable_text_view,this,true);
         mTextView = (MyTextView) view.findViewById(R.id.textView);
         mRelativeLayout = (RelativeLayout) view.findViewById(R.id.relativeLayout);
@@ -54,10 +58,6 @@ public abstract class ReplaceableTextView extends FrameLayout{
     }
 
     public void replaceSpanWithView() {
-        if (mRelativeLayout.getChildCount() > 0) {
-            mRelativeLayout.removeAllViews();
-        }
-
         for (EmptySpan s : tagSpans) {
 
             int start = spanned.getSpanStart(s);
@@ -70,12 +70,20 @@ public abstract class ReplaceableTextView extends FrameLayout{
             int spanTop = base + descent - s.height();
             int topMargin = spanTop + topPadding;
 
-            View myView = getReplaceView();
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(s.width(), s.height());
-            params.leftMargin = leftMargin;
-            params.topMargin = topMargin;
-            mRelativeLayout.addView(myView, params);
-
+            T view = hashMap.get(s);
+            if(view == null){
+                view = getReplaceView();
+                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(s.width(), s.height());
+                params.leftMargin = leftMargin;
+                params.topMargin = topMargin;
+                mRelativeLayout.addView(view, params);
+                hashMap.put(s,view);
+            }else {
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) view.getLayoutParams();
+                params.leftMargin = leftMargin;
+                params.topMargin = topMargin;
+                view.setLayoutParams(params);
+            }
         }
     }
 
@@ -86,7 +94,7 @@ public abstract class ReplaceableTextView extends FrameLayout{
     protected Html.ImageGetter getImageGetter(){
         return new HtmlImageGetter(mContext, mTextView);
     }
-    protected abstract View getReplaceView();
+    protected abstract T getReplaceView();
 
     protected abstract ReplaceTagHandler getTagHandler();
 

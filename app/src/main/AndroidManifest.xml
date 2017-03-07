@@ -17,6 +17,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".ActivityA"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop"/>
+        <activity android:name=".ActivityB"
+            android:screenOrientation="portrait"
             android:launchMode="singleTop"/>
     </application>
 

@@ -1,18 +1,16 @@
 package com.example.sp.fillblankdemo;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.os.Build;
+import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.widget.TextView;
 
 /**
  * Created by sp on 17-3-2.
  */
 
-public class MyTextView extends TextView {
+public class MyTextView extends AppCompatTextView {
     OnDrawFinishedListener onDrawFinishedListener;
     public MyTextView(Context context) {
         super(context);
@@ -26,17 +24,13 @@ public class MyTextView extends TextView {
         super(context, attrs, defStyleAttr);
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public MyTextView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-    }
-
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if(onDrawFinishedListener != null){
             onDrawFinishedListener.onDrawFinished();
         }
+        Log.i("MyTextView","onDraw called!");
     }
 
     public OnDrawFinishedListener getOnDrawFinishedListener() {
