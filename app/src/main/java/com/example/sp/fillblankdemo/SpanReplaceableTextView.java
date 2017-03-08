@@ -11,37 +11,42 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by sp on 17-2-23.
  */
 
-public abstract class ReplaceableTextView<T extends View> extends FrameLayout{
+public abstract class SpanReplaceableTextView<T extends View> extends FrameLayout{
     protected MyTextView mTextView;
     protected RelativeLayout mRelativeLayout;
     protected Context mContext;
     protected Spanned spanned;
     protected EmptySpan[] tagSpans;
-    private HashMap<EmptySpan,T> hashMap;
-    public ReplaceableTextView(Context context) {
+    private LinkedHashMap<EmptySpan,T> linkedHashMap;
+    public SpanReplaceableTextView(Context context) {
         super(context);
         init(context);
     }
 
-    public ReplaceableTextView(Context context, AttributeSet attrs) {
+    public SpanReplaceableTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
 
-    public ReplaceableTextView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public SpanReplaceableTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
     }
 
     private void init(Context context){
         mContext = context;
-        hashMap = new HashMap<>();
+        linkedHashMap = new LinkedHashMap<>();
         View view = LayoutInflater.from(context).inflate(R.layout.replaceable_text_view,this,true);
         mTextView = (MyTextView) view.findViewById(R.id.textView);
         mRelativeLayout = (RelativeLayout) view.findViewById(R.id.relativeLayout);
@@ -70,14 +75,14 @@ public abstract class ReplaceableTextView<T extends View> extends FrameLayout{
             int spanTop = base + descent - s.height();
             int topMargin = spanTop + topPadding;
 
-            T view = hashMap.get(s);
+            T view = linkedHashMap.get(s);
             if(view == null){
                 view = getReplaceView();
                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(s.width(), s.height());
                 params.leftMargin = leftMargin;
                 params.topMargin = topMargin;
                 mRelativeLayout.addView(view, params);
-                hashMap.put(s,view);
+                linkedHashMap.put(s,view);
             }else {
                 RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) view.getLayoutParams();
                 params.leftMargin = leftMargin;
@@ -87,9 +92,21 @@ public abstract class ReplaceableTextView<T extends View> extends FrameLayout{
         }
     }
 
+    public List<T> getReplacement(){
+        List<T> list = new ArrayList<>();
+        Set<Map.Entry<EmptySpan,T>> entries =  linkedHashMap.entrySet();
+        Iterator<Map.Entry<EmptySpan,T>> iterator = entries.iterator();
+        while (iterator.hasNext()){
+            Map.Entry<EmptySpan,T> entry = iterator.next();
+            list.add(entry.getValue());
+        }
+        return list;
+    }
     public void removeAllReplacementView(){
-        if(mRelativeLayout.getChildCount()>0)
+        if(mRelativeLayout.getChildCount()>0){
             mRelativeLayout.removeAllViews();
+            linkedHashMap.clear();
+        }
     }
     protected Html.ImageGetter getImageGetter(){
         return new HtmlImageGetter(mContext, mTextView);
