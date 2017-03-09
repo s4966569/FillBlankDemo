@@ -17,11 +17,11 @@ public class FillBlankEmptySpan extends EmptySpan {
 
     @Override
     protected int height() {
-        return 180;
+        return lineHeight;
     }
 
     @Override
     protected int color() {
-        return Color.GREEN;
+        return Color.TRANSPARENT;
     }
 }

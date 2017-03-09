@@ -16,6 +16,7 @@ import android.util.Log;
 
 public abstract class EmptySpan extends DynamicDrawableSpan {
     public int lineHeight;
+    public int lineSpace;
 
     @Override
     public Drawable getDrawable() {
@@ -53,9 +54,9 @@ public abstract class EmptySpan extends DynamicDrawableSpan {
                 int orgDescent = fm.descent;
                 int extraSpace = height() - (fm.descent - fm.ascent);
                 fm.descent = extraSpace / 2 + orgDescent;
-                fm.bottom = fm.descent;
+                fm.bottom = fm.bottom + extraSpace /2;
                 fm.ascent = -height() + fm.descent;
-                fm.top = fm.ascent;
+                fm.top = fm.top - extraSpace /2;
             }
         }
         return width();

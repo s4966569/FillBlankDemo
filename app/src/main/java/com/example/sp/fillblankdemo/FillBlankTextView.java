@@ -25,7 +25,6 @@ public class FillBlankTextView extends SpanReplaceableTextView<EditText> {
     protected EditText getReplaceView() {
         EditText editText = new EditText(getContext());
         editText.setText("11111");
-        editText.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         editText.setSingleLine();
         return editText;
     }

@@ -5,17 +5,17 @@ search your <img src="http://h.hiphotos.baidu.com/zhidao/pic/item/6d81800a19d8bc
 search your <FillBlank>soul</FillBlank>
 and when you found me there
 you will search no more
-look into my eye
-you will see
-what you mean to me
-look into my eye
+look <Empty>pppp</Empty>into my eye
+<Empty>you will see</Empty>
+what you mean to me<Empty>
+look into my eye</Empty>
 you will see
 what you mean to me
 look into my eye
 you will see
 what you mean to me
 look into <Empty>blank party no matter how many charactor in here</Empty> my eye
-you will see
+you will<Empty>oooo</Empty> see
 what you mean to me
 look into my eye
 you will see

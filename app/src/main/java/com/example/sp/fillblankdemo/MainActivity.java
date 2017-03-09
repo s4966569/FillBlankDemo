@@ -2,6 +2,7 @@ package com.example.sp.fillblankdemo;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.Layout;
@@ -45,8 +46,8 @@ public class MainActivity extends Activity {
         for (EmptySpan s : spans) {
             s.lineHeight = tv.getLineHeight();
         }
+        tv.setLineSpacing(5,1);
         tv.setText(spannedStr, TextView.BufferType.SPANNABLE);
-//        tv.setText(spannedStr);
         rlMaskView = (RelativeLayout) findViewById(R.id.rl_top_mask);
         bottomImageView = (ImageView) findViewById(R.id.iv_bottom);
 
